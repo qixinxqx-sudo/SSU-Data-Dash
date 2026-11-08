@@ -13,14 +13,14 @@
 \input{../reports/numbers.tex}
 
 \title{SSU Data Dash 2026: A de-trended random forest for Toronto-area home prices}
-\author{\todo{your full name}}
+\author{Qixin Xiao}
 \date{}
 
 \begin{document}
 \maketitle
 
 \noindent\begin{tabular}{@{}ll}
-\textbf{Video (YouTube, unlisted is fine):} & \url{https://youtu.be/YOUR-VIDEO} \\
+\textbf{Video (YouTube, unlisted is fine):} & \url{https://youtu.be/ugm2MfIyd_I} \\
 \textbf{Code and submission files (GitHub):} & \url{https://github.com/erwinzhang7/SSU-Data-Dash} \\
 \end{tabular}
 
@@ -41,7 +41,7 @@ The list-aware model also gets the log list price and how far the list price sit
 \section{Models}
 \textbf{Price index.} Prices drift over time and a forest cannot predict outside the range it was trained on. We therefore fit an OLS regression of log price on type$\times$size, municipality, rooms, parking, lot, and one dummy per sale month. The month coefficients form a price index. For homes to be predicted, the index level is \trendUsed{} (off-market level \indexLevel{} in the final model). We chose the setting for each track by validation: extrapolating the trend made the off-market error worse (MdAPE 11.9\% instead of 11.4\%) but the list-aware error better (5.7\% instead of 6.0\%). Choosing it on the same six months we report is a mild form of tuning on the validation set.
 
-\textbf{Off-market model (no list price).} A random forest (\texttt{ranger}, \todo{confirm: 200 trees, minimum node size 10, 40\% of rows per tree, mtry = one third of features}) predicts $\log(\text{price}) - \text{index}$. The prediction is $\exp(\text{forest output} + \text{index})$. Modelling logs makes errors proportional to price, which matches a percentage-error metric and stops expensive homes dominating the fit.
+\textbf{Off-market model (no list price).} A random forest (\texttt{ranger}, 200 trees, minimum node size 10, 40\% of rows per tree, and one third of the features tried at each split) predicts $\log(\text{price}) - \text{index}$. The prediction is $\exp(\text{forest output} + \text{index})$. Modelling logs makes errors proportional to price, which matches a percentage-error metric and stops expensive homes dominating the fit.
 
 \textbf{List-aware model.} A second forest predicts $\log(\text{sold}/\text{list})$, i.e.\ how far above or below list a home sells, and the forecast is list price $\times\exp(\hat y)$. Anchoring on the seller's own price turns the task into a much easier one: learning the gap.
 
