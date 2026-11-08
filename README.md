@@ -16,6 +16,10 @@ Solo submission. Random forest on log prices for Toronto-area sold-price predict
 | `figures/` | Figures used in the report |
 | `ablation.R` | Extra experiments: one-change-at-a-time tests, community errors |
 
+## Important: how the submission files were made
+
+The two submission CSVs were written by the R script `ssu_random_forest_v2.R`, **not** by the starter's `run.py`. The starter Python files (`run.py`, `features.py`, `models.py`, `data.py`, `check_submission.py`) are unchanged. Running `python run.py predict` would overwrite the CSVs with the starter's predictions, so please use the R script to reproduce our results.
+
 ## Reproducing
 
 1. Install R (with RStudio if you like). Put `ssu_random_forest_v2.R` in an empty folder.
